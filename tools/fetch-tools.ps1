@@ -10,6 +10,8 @@ New-Item -ItemType Directory -Force $bin, (Join-Path $bin 'whisper'), $tmp | Out
 
 $NODE_VERSION = '26.13.0'
 $ARIA2_VERSION = '1.37.0'
+# whisper.cpp publishes Windows binaries on its build releases (bNNNN), not on the version tags.
+$WHISPER_TAG = 'b5907'
 $versions = [ordered]@{}
 
 function Fetch($name, $url, $file) {
@@ -61,12 +63,12 @@ $versions.aria2 = ((& (Join-Path $bin 'aria2c.exe') --version | Select-Object -F
 # whisper.cpp: CPU build; the app downloads the CUDA build itself on NVIDIA PCs.
 if (Have 'whisper\whisper-cli.exe') { Write-Host '  whisper-cli.exe present' } else {
   $zip = Join-Path $tmp 'whisper.zip'
-  Fetch 'whisper.cpp (x64)' 'https://github.com/ggml-org/whisper.cpp/releases/latest/download/whisper-bin-x64.zip' $zip
+  Fetch "whisper.cpp $WHISPER_TAG (x64)" "https://github.com/ggml-org/whisper.cpp/releases/download/$WHISPER_TAG/whisper-bin-x64.zip" $zip
   Unzip $zip (Join-Path $tmp 'whisper')
   $cli = Get-ChildItem (Join-Path $tmp 'whisper') -Recurse -Filter 'whisper-cli.exe' | Select-Object -First 1
   Get-ChildItem $cli.DirectoryName -File | Where-Object { $_.Extension -in '.exe', '.dll' } | Copy-Item -Destination (Join-Path $bin 'whisper') -Force
 }
-$versions.whisper = 'whisper.cpp ' + (Get-Item (Join-Path $bin 'whisper\whisper-cli.exe')).LastWriteTime.ToString('yyyy-MM-dd')
+$versions.whisper = "whisper.cpp $WHISPER_TAG"
 
 $versions.fetched = (Get-Date).ToString('s')
 ($versions | ConvertTo-Json) | Set-Content (Join-Path $bin 'versions.json') -Encoding utf8

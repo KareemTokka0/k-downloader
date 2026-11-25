@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo-512.png" width="128" alt="K Downloader logo"></p>
+
 # K Downloader
 
 **Kareem Downloader Tool.** A Windows download manager for media teams: video up to 4K and audio from YouTube,

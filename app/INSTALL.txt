@@ -1,0 +1,24 @@
+K Downloader (Kareem Downloader Tool)
+Developed by Kareem Waheed - https://www.linkedin.com/in/kareemtokka/
+
+INSTALL ON ANY WINDOWS PC
+1. Run "K Downloader Setup x.y.z.exe". If Windows shows "Windows protected your PC", press "More info" then "Run anyway" (the installer is not code-signed yet).
+2. Press Next through the pages. On the "Browser extension" page tick the browsers you use (works once the extension is on the Chrome Web Store).
+3. Leave "Open K Downloader and the setup guide" ticked and press Finish.
+4. The setup guide opens. Step 1: press "Open Chrome extensions", turn on Developer mode, press "Load unpacked" and paste the folder path (already in your clipboard). Step 2 and 3 need nothing.
+5. Done. The app sits in the tray, starts with Windows, and restarts itself if it ever stops.
+
+CLAUDE
+- Claude Code or the Claude desktop app: nothing to configure. K Downloader registers itself every time it starts.
+  Restart Claude once after installing, then say "download this video in 4K: <link>".
+- No Claude on this PC: the app and the browser button work on their own. Install Claude later and it is registered the next time K Downloader starts.
+
+TEAM PCs
+- Put this dist folder (the Setup file and latest.json) on a shared folder. In Settings > App updates, point every PC at it; new versions install quietly at sign-in.
+- Settings > Projects folder can point at the shared projects root so downloads land inside the right project.
+
+CHECK A PC
+- In the K Downloader source folder, double-click check.cmd: one line per item and what to do about anything missing.
+
+SILENT INSTALL (IT)
+"K Downloader Setup x.y.z.exe" /S /EXT=chrome,edge

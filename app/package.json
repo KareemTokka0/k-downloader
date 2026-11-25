@@ -1,0 +1,95 @@
+{
+  "name": "k-downloader",
+  "productName": "K Downloader",
+  "version": "3.12.1",
+  "description": "Kareem Downloader Tool: videos up to 4K, audio, frames and subtitles, ready for editing.",
+  "author": "Kareem Waheed (https://www.linkedin.com/in/kareemtokka/)",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/KareemTokka0/k-downloader.git" },
+  "homepage": "https://github.com/KareemTokka0/k-downloader",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --dev",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.kareemwaheed.kdownloader",
+    "productName": "K Downloader",
+    "artifactName": "K Downloader Setup ${version}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "browser.js",
+      "scraper.js",
+      "updater.js",
+      "preload.js",
+      "ui/**",
+      "icon.ico",
+      "icon.png",
+      "installer-sidebar.bmp",
+      "installer-header.bmp"
+    ],
+    "extraResources": [
+      {
+        "from": "payload/helper",
+        "to": "helper"
+      },
+      {
+        "from": "payload/bin",
+        "to": "bin"
+      },
+      {
+        "from": "payload/assets",
+        "to": "assets"
+      },
+      {
+        "from": "payload/extension",
+        "to": "extension"
+      },
+      {
+        "from": "payload/kareem-downloader.user.js",
+        "to": "kareem-downloader.user.js"
+      },
+      {
+        "from": "payload/README.md",
+        "to": "README.md"
+      }
+    ],
+    "asar": true,
+    "compression": "store",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.ico",
+      "signAndEditExecutable": true
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "K Downloader",
+      "installerIcon": "icon.ico",
+      "installerSidebar": "installer-sidebar.bmp",
+      "uninstallerSidebar": "installer-sidebar.bmp",
+      "installerHeader": "installer-header.bmp",
+      "uninstallDisplayName": "K Downloader",
+      "deleteAppDataOnUninstall": false,
+      "include": "installer.nsh"
+    }
+  }
+}

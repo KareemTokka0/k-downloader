@@ -1,0 +1,64 @@
+name: Build installer
+
+# A tag like v3.12.1 builds the Windows installer and publishes it as a GitHub Release with latest.json,
+# which installed copies read from the release's "latest/download" URL to update themselves.
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch bundled tools
+        shell: cmd
+        run: tools\fetch-tools.cmd
+
+      - name: Quick preflight (syntax, units, extension decisions)
+        shell: cmd
+        run: bin\node.exe tests\preflight.js --quick
+
+      - name: Build installer
+        shell: cmd
+        env:
+          KD_SKIP_TESTS: '1'
+        run: app\build.cmd
+
+      - name: Name the release files
+        id: files
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem 'dist\review' -Filter 'K Downloader Setup *.exe' | Select-Object -First 1
+          $version = [regex]::Match($setup.Name, '(\d+\.\d+\.\d+)').Groups[1].Value
+          $name = "K-Downloader-Setup-$version.exe"
+          New-Item -ItemType Directory -Force out | Out-Null
+          Copy-Item $setup.FullName "out\$name"
+          $sha = (Get-FileHash "out\$name" -Algorithm SHA256).Hash.ToLower()
+          @{ version = $version; file = $name; sha256 = $sha; date = (Get-Date).ToUniversalTime().ToString('o') } | ConvertTo-Json | Set-Content out\latest.json -Encoding ascii
+          Copy-Item bin\versions.json out\tool-versions.json
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $notes = "Windows installer. Bundled tool versions are in tool-versions.json; licences in THIRD-PARTY-NOTICES.md."
+          gh release create "${{ github.ref_name }}" out\* --title "K Downloader ${{ steps.files.outputs.version }}" --notes $notes --generate-notes
+
+      - name: Keep the installer as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: K-Downloader-Setup-${{ steps.files.outputs.version }}
+          path: out\*

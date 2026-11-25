@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src https: http: data:; media-src https: http:; font-src 'self'">
+<title>K Downloader</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<aside class="side">
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#07382b"/><g fill="#3bf0a0" transform="translate(16.34 16.34) scale(.66)"><polygon points="8,8 30,8 30,42 58,8 86,8 30,72 30,92 8,92"/><polygon points="58,50 78,50 78,66 94,66 68,94 42,66 58,66"/></g></svg>
+    <div><b>K Downloader</b><small>Kareem Downloader Tool</small></div>
+  </div>
+  <nav>
+    <button class="nav on" data-page="download">Download</button>
+    <button class="nav" data-page="links">Links</button>
+    <button class="nav" data-page="browser">Browser</button>
+    <button class="nav" data-page="images">Images</button>
+    <button class="nav" data-page="footage">Footage</button>
+    <button class="nav" data-page="history">History</button>
+    <button class="nav" data-page="settings">Settings</button>
+  </nav>
+  <div class="side-foot">
+    <span id="helper-state" class="dot off">Helper</span>
+    <span id="version"></span>
+  </div>
+  <div class="credit">Developed by <b>Kareem Waheed</b><br><a href="https://www.linkedin.com/in/kareemtokka/" id="credit-mail">linkedin.com/in/kareemtokka</a></div>
+</aside>
+
+<main>
+  <section id="page-download" class="page on">
+    <div class="urlbar">
+      <input id="url" type="text" placeholder="Paste a video link and press Enter" spellcheck="false" autocomplete="off">
+      <button id="paste" class="btn" title="Paste from clipboard">Paste</button>
+      <button id="lookup" class="btn primary">Look up</button>
+    </div>
+    <div id="info"></div>
+  </section>
+
+  <section id="page-links" class="page">
+    <h2>Download a list of links</h2>
+    <p class="sub">Every link downloads with the same settings. Links from any supported site work.</p>
+    <div class="opts" id="links-settings"></div>
+    <textarea id="links" placeholder="Paste links here, one per line" spellcheck="false"></textarea>
+    <div class="row-actions"><button id="links-go" class="btn primary" disabled>Download all</button><span id="links-status" class="sub"></span></div>
+  </section>
+
+  <section id="page-browser" class="page browserpage">
+    <div class="bbar">
+      <button id="b-back" class="btn icon" title="Back">‹</button><button id="b-fwd" class="btn icon" title="Forward">›</button><button id="b-reload" class="btn icon" title="Reload">↻</button>
+      <input id="b-url" type="text" placeholder="Search or paste a link" spellcheck="false" autocomplete="off">
+      <button id="b-dl" class="btn primary" title="Download the video on this page">Download this page</button>
+      <button id="b-ext" class="btn" title="Open in your normal browser">↗</button>
+    </div>
+    <div id="b-note" class="sub bnote">Sign in to sites here once. Downloads and Claude then use these logins. <button id="b-clear" class="link">Sign out of everything</button></div>
+    <div id="b-view" class="bview"></div>
+  </section>
+
+  <section id="page-images" class="page">
+    <div class="urlbar">
+      <input id="img-q" type="text" placeholder="Describe the photo, e.g. girl with blue eyes" autocomplete="off">
+      <select id="img-orient"><option value="">Any shape</option><option value="landscape">Landscape</option><option value="portrait">Portrait</option><option value="square">Square</option></select>
+      <button id="img-go" class="btn primary">Search</button>
+    </div>
+    <div id="img-providers" class="chips"></div>
+    <div id="img-bar" class="row-actions" hidden>
+      <span id="img-count" class="sub"></span>
+      <button id="img-all" class="link">Select all</button><button id="img-none" class="link">Select none</button>
+      <span style="flex:1"></span>
+      <select id="img-size"><option value="small">Small (~1000px)</option><option value="medium">Medium (~1900px)</option><option value="large" selected>Large (~3800px)</option><option value="original">Original</option></select>
+      <button id="img-dl" class="btn primary" disabled>Download selected</button>
+    </div>
+    <div id="img-grid" class="imggrid"></div>
+    <div id="img-more" class="row-actions" hidden><button id="img-next" class="btn">Load more</button><span id="img-status" class="sub"></span></div>
+  </section>
+
+  <section id="page-footage" class="page">
+    <div class="urlbar">
+      <input id="vid-q" type="text" placeholder="Describe the clip, e.g. olive harvest drone" autocomplete="off">
+      <select id="vid-orient"><option value="">Any shape</option><option value="landscape">Landscape</option><option value="portrait">Portrait</option><option value="square">Square</option></select>
+      <select id="vid-len"><option value="">Any length</option><option value="0-10">Up to 10 s</option><option value="10-30">10 to 30 s</option><option value="30-0">Over 30 s</option></select>
+      <button id="vid-go" class="btn primary">Search</button>
+    </div>
+    <div id="vid-providers" class="chips"></div>
+    <div id="vid-bar" class="row-actions" hidden>
+      <span id="vid-count" class="sub"></span>
+      <button id="vid-all" class="link">Select all</button><button id="vid-none" class="link">Select none</button>
+      <span style="flex:1"></span>
+      <select id="vid-quality"><option value="720">720p</option><option value="1080" selected>1080p</option><option value="2160">4K</option><option value="best">Best available</option></select>
+      <button id="vid-dl" class="btn primary" disabled>Download selected</button>
+    </div>
+    <div id="vid-grid" class="imggrid"></div>
+    <div id="vid-more" class="row-actions" hidden><button id="vid-next" class="btn">Load more</button><span id="vid-status" class="sub"></span></div>
+  </section>
+
+  <section id="page-history" class="page">
+    <div class="urlbar"><input id="search" type="search" placeholder="Search by video name" autocomplete="off"></div>
+    <div id="history"></div>
+  </section>
+
+  <section id="page-setup" class="page">
+    <h2>Welcome to K Downloader</h2>
+    <p class="sub">Three short steps and everything works by itself from then on. You can come back here any time from Settings.</p>
+    <div class="setup-step"><div class="num">1</div><div class="body">
+      <b>Browser button and download manager</b>
+      <small>Open your browser's extensions page, turn on <b>Developer mode</b> (top right), press <b>Load unpacked</b> and paste the folder path (it is already copied to your clipboard). The extension connects by itself.</small>
+      <div class="row-actions"><button id="setup-chrome" class="btn primary">Open Chrome extensions</button><button id="setup-edge" class="btn">Open Edge extensions</button><button id="setup-extfolder" class="btn">Copy folder path</button><span id="setup-ext-note" class="sub"></span></div>
+    </div></div>
+    <div class="setup-step"><div class="num">2</div><div class="body">
+      <b>Claude</b>
+      <small id="setup-claude-note">Checking...</small>
+    </div></div>
+    <div class="setup-step"><div class="num">3</div><div class="body">
+      <b>Where files go</b>
+      <small id="setup-out-note"></small>
+      <div class="row-actions"><button id="setup-out" class="btn">Change folder</button></div>
+    </div></div>
+    <div class="row-actions" style="margin-top:18px"><button id="setup-done" class="btn primary">Done</button><span class="sub">Developed by Kareem Waheed · linkedin.com/in/kareemtokka</span></div>
+  </section>
+
+  <section id="page-settings" class="page">
+    <h2>Settings</h2>
+    <div class="setting"><div><b>Downloads folder</b><small id="out"></small></div><div><button id="open-out" class="btn">Open</button> <button id="change-out" class="btn">Change</button></div></div>
+    <div class="setting"><div><b>Projects folder</b><small id="projects-note">Optional. A folder of project folders; pick a project below and downloads land inside it (01 Brief, 02 References, 03 Footage, 04 Photos, 05 Exports) instead of Downloads.</small><small id="projects"></small></div><div style="white-space:nowrap"><select id="project-current" style="max-width:220px"></select> <button id="change-projects" class="btn">Change</button> <button id="clear-projects" class="btn">Off</button></div></div>
+    <div class="setting"><div><b>Cache folder</b><small>Partial downloads, speech models and the GPU engine. Move it to a bigger drive if you like; the helper restarts.</small><small id="cache"></small></div><div style="white-space:nowrap"><button id="change-cache" class="btn">Change</button> <button id="clear-cache" class="btn">Default</button></div></div>
+    <div class="setting" style="flex-direction:column;align-items:stretch"><div style="display:flex;justify-content:space-between;align-items:center;gap:20px"><div><b>Source health</b><small id="sources-note">Every search site is tried once a day with a fixed phrase. A site that used to answer and now gives nothing is marked broken.</small></div><button id="sources-check" class="btn">Check now</button></div><div id="sources" class="sources"></div></div>
+    <div class="setting"><div><b>Start with Windows</b><small>Runs quietly in the tray at sign-in, so the browser button and Claude Code always work.</small></div><label class="switch"><input id="startup" type="checkbox"><span></span></label></div>
+    <div class="setting"><div><b>Chrome extension</b><small>The Download button on YouTube, Facebook, Instagram and more, plus a download manager for every file you save in Chrome. Open <code>chrome://extensions</code>, turn on Developer mode, press <b>Load unpacked</b> and pick this folder. Then click the K icon in Chrome and press <b>Connect</b>. After an update, press the reload arrow on the extension's card.</small></div><button id="open-extension" class="btn">Open folder</button></div>
+    <div class="setting"><div><b>Userscript (optional)</b><small>The same Download button for browsers without the extension, through OrangeMonkey or Tampermonkey.</small></div><button id="install-script" class="btn">Install script</button></div>
+    <div class="setting"><div><b>Claude</b><small id="mcp-note">Registered automatically in Claude Code and the Claude desktop app every time K Downloader starts. Restart Claude once after installing.</small></div><div style="white-space:nowrap"><button id="register-mcp" class="btn">Register again</button> <button id="open-setup" class="btn">Setup guide</button></div></div>
+    <div class="setting" style="flex-direction:column;align-items:stretch"><div style="display:flex;justify-content:space-between;align-items:center;gap:20px"><div><b>App updates</b><small id="upd-note">Point this at the team's shared folder (or a web address) that holds the newest Setup file and latest.json. The app checks every 6 hours and installs quietly at sign-in.</small></div><div style="white-space:nowrap"><button id="upd-check" class="btn">Check now</button> <button id="upd-install" class="btn primary" hidden>Install update</button></div></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:10px"><input id="upd-source" type="text" placeholder="\\server\share\K Downloader\dist  or  https://example.com/kd" spellcheck="false" autocomplete="off" style="flex:1;padding:7px 9px;border:1px solid var(--line2);border-radius:8px;background:#0f1012;color:#fff;font:12px Consolas,monospace"><button id="upd-save" class="btn">Save</button><label class="switch" title="Install updates automatically at sign-in"><input id="upd-auto" type="checkbox"><span></span></label></div></div>
+    <div class="setting"><div><b>GPU speech engine</b><small id="gpu-note">Checking the graphics card...</small></div><button id="gpu-install" class="btn" hidden>Install (650 MB)</button></div>
+    <div class="setting"><div><b>Download engine</b><small id="engine-note">Updates itself once a day.</small></div><button id="update-engine" class="btn">Update now</button></div>
+    <div class="setting"><div><b>Image sources</b><small>No keys needed: the app reads each site's own search page in a hidden browser window. Green sources (Pexels, Pixabay, Unsplash) are free to use; Openverse and Wikimedia show the licence per photo; the grey sources (Google, Bing, Yandex, Pinterest) are reference only and must never be published; paid stock sites are left out on purpose. Sign in to Pinterest or Google on the Browser page to get their full results. A site that asks to check you are human opens a window once.</small></div></div>
+    <div class="setting"><div><b>Pairing code</b><small>Only needed if the browser script asks for it.</small></div><div><code id="code" class="code">••••••••</code> <button id="show-code" class="btn">Show</button> <button id="copy-code" class="btn">Copy</button></div></div>
+    <div class="setting"><div><b>Data folder</b><small id="data"></small></div><button id="open-data" class="btn">Open</button></div>
+  </section>
+
+  <aside id="jobs" class="jobs" hidden></aside>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

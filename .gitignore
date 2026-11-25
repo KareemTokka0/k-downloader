@@ -1,0 +1,20 @@
+# Bundled tools are fetched by tools\fetch-tools.cmd, never committed (450 MB of third-party binaries).
+bin/*
+!bin/README.md
+
+# Build output and installers: published through GitHub Releases.
+dist/
+app/dist/
+app/node_modules/
+app/payload/
+extension-store/*.zip
+
+# Per-PC and private files.
+CLAUDE.local.md
+extension/store-id.txt
+handoff-mac/
+*.log
+*.tmp
+Thumbs.db
+desktop.ini
+.DS_Store

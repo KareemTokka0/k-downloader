@@ -66,7 +66,8 @@ if (Have 'whisper\whisper-cli.exe') { Write-Host '  whisper-cli.exe present' } e
   Fetch "whisper.cpp $WHISPER_TAG (x64)" "https://github.com/ggml-org/whisper.cpp/releases/download/$WHISPER_TAG/whisper-bin-x64.zip" $zip
   Unzip $zip (Join-Path $tmp 'whisper')
   $cli = Get-ChildItem (Join-Path $tmp 'whisper') -Recurse -Filter 'whisper-cli.exe' | Select-Object -First 1
-  Get-ChildItem $cli.DirectoryName -File | Where-Object { $_.Extension -in '.exe', '.dll' } | Copy-Item -Destination (Join-Path $bin 'whisper') -Force
+  # Only the CLI and its libraries: the release zip also holds benchmarks, tests and other tools the app never runs.
+  Get-ChildItem $cli.DirectoryName -File | Where-Object { $_.Name -eq 'whisper-cli.exe' -or $_.Extension -eq '.dll' } | Copy-Item -Destination (Join-Path $bin 'whisper') -Force
 }
 $versions.whisper = "whisper.cpp $WHISPER_TAG"
 

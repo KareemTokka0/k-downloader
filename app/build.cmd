@@ -40,7 +40,8 @@ set "SIGNARGS="
 if defined KD_SIGN_SUBJECT set "SIGNARGS=--config.win.signtoolOptions.certificateSubjectName=%KD_SIGN_SUBJECT% --config.win.signtoolOptions.rfc3161TimeStampServer=http://timestamp.digicert.com"
 if defined KD_SIGN_AZURE set "SIGNARGS=--config.win.azureSignOptions.endpoint=%KD_SIGN_AZURE_ENDPOINT% --config.win.azureSignOptions.codeSigningAccountName=%KD_SIGN_AZURE_ACCOUNT% --config.win.azureSignOptions.certificateProfileName=%KD_SIGN_AZURE_PROFILE%"
 if defined SIGNARGS echo Signing with: %SIGNARGS%
-call npx.cmd electron-builder --win %SIGNARGS% || goto :fail
+rem --publish never: on a tagged commit electron-builder would otherwise try to publish a GitHub release itself.
+call npx.cmd electron-builder --win --publish never %SIGNARGS% || goto :fail
 rem A new build waits in dist\review until Karim has reviewed it; app\release.cmd then moves it into dist and
 rem writes latest.json, which is the moment every installed copy learns about it.
 if not exist "%ROOT%\dist\review" mkdir "%ROOT%\dist\review"
